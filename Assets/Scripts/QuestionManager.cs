@@ -24,7 +24,7 @@ public class QuestionManager : MonoBehaviour
     public Text newAbilityText;
 
     [SerializeField] private int correctAnswers = 0;
-    [SerializeField] private int incorrectAnswers = 0;
+    [SerializeField] private int incorrectAnswers = 1;
     [SerializeField] private int currentQuestionDifficulty = 1;
     public int abilitiesGained;
 
@@ -41,15 +41,18 @@ public class QuestionManager : MonoBehaviour
     int number2 = 0;
     public int newAbilities = 0;
     public int abilityIndexUp;
+    
 
    
     public int playerAnswer;
 
     public Canvas attackQuestionCanvas;
     [SerializeField] public bool canUseAbility = false;
+    public bool hasAbility = false;
 
     
      [SerializeField]Image[] allAbilities = new Image[10];
+   
 
     private void Awake()
     {
@@ -75,11 +78,12 @@ public class QuestionManager : MonoBehaviour
         {
             feedback.text = "Correct!";
             correctAnswers++;
-            incorrectAnswers = 0;
+            incorrectAnswers = 1 ;
             AdjustDifficulty();
             GainAbility();
             player.DealDamage(enemy);
             canUseAbility = true;
+            hasAbility = false;
             
            
         }
@@ -93,6 +97,8 @@ public class QuestionManager : MonoBehaviour
             Player player = FindObjectOfType<Player>();
             Enemy enemy = FindObjectOfType<Enemy>();
             enemy.DealDamage(player);
+            hasAbility = true;
+
         }
         answerInput.text = "";
         GenerateNewQuestion(choices.value);
@@ -141,7 +147,7 @@ public class QuestionManager : MonoBehaviour
 
     void AdjustDifficulty()
     {
-        if (correctAnswers >= 3)
+        if (correctAnswers >= 3 )
         {
             currentQuestionDifficulty++;
             feedback.text += " Difficulty increased!";
@@ -175,10 +181,19 @@ public class QuestionManager : MonoBehaviour
 
     public void GainAbility()
     {
-        if (correctAnswers >= 6)
+        if (correctAnswers % 4 == 0 && hasAbility == false && incorrectAnswers % 2 != 0)
         {
-            newAbilityText.text = "You have gained an Ability! Answer and press " + abilitiesGained + " to use";
+            if (abilitiesGained == 3)
+            {
+                newAbilityText.text = "You can now block enemy attacks!";
+            }
+            else
+            {
+                newAbilityText.text = "You have gained an Ability! Answer and press " + (abilitiesGained + 1) + " to use";
+            }
             abilitiesGained++;
+            allAbilities[abilitiesGained - 1].gameObject.SetActive(true);
+            
            
             
         }
@@ -200,65 +215,135 @@ public class QuestionManager : MonoBehaviour
         {
             
                 Debug.Log("Used Ability 1");
-                player.attackPower += 5;
                 player.DealDamage(enemy);
                 player.animator.SetTrigger("Attack");
                 canUseAbility = false;
+            if (player.attackPower <= 10)
+            {
+                player.attackPower += 5;
+            }
             
         }
-        else if (Input.GetKeyDown(KeyCode.Alpha2) && abilitiesGained >= 2)
+        else if (Input.GetKeyDown(KeyCode.Alpha2) && abilitiesGained >= 2 && canUseAbility)
         {
-           
+
             Debug.Log("Used Ability 2");
-            abilityIndexUp = 1;
+            player.DealDamage(enemy);
+            player.animator.ResetTrigger("Attack");
+            player.animator.SetTrigger("Bow");
+            canUseAbility = false;
+            if (player.attackPower <= 22)
+            {
+                player.attackPower += 7;
+            }
         }
-        else if (Input.GetKeyDown(KeyCode.Alpha3) && abilitiesGained >= 3)
+        else if (Input.GetKeyDown(KeyCode.Alpha3) && abilitiesGained >= 3 && canUseAbility)
         {
-            
             Debug.Log("Used Ability 3");
-            abilityIndexUp = 2;
+            player.DealDamage(enemy);
+            player.animator.ResetTrigger("Bow");
+            player.animator.SetTrigger("Spell");
+            canUseAbility = false;
+            if (player.attackPower <= 29)
+            {
+                player.attackPower += 7;
+            }
         }
-        else if (Input.GetKeyDown(KeyCode.Alpha4) && abilitiesGained >= 4)
+        else if (Input.GetKeyDown(KeyCode.Alpha4) && abilitiesGained >= 4 && canUseAbility)
         {
-            
             Debug.Log("Used Ability 4");
-            abilityIndexUp = 3;
+            if (enemy.dealingDamage == true)
+            {
+                player.currentHealth += enemy.attackPower;
+                
+            }
+            player.animator.ResetTrigger("Spell");
+            player.animator.SetTrigger("Block");
+            canUseAbility = false;
+            if (player.attackPower <= 36)
+            {
+                player.attackPower += 7;
+            }
+
         }
-        else if (Input.GetKeyDown(KeyCode.Alpha5) && abilitiesGained >= 5)
+        else if (Input.GetKeyDown(KeyCode.Alpha5) && abilitiesGained >= 5 && canUseAbility)
         {
             
             Debug.Log("Used Ability 5");
-            abilityIndexUp = 4;
+            player.DealDamage(enemy);
+            player.animator.ResetTrigger("Block");
+            player.animator.SetTrigger("Stab");
+            canUseAbility = false;
+            if (player.attackPower <= 43)
+            {
+                player.attackPower += 7;
+            }
         }
-        else if (Input.GetKeyDown(KeyCode.Alpha6) && abilitiesGained >= 6)
+        else if (Input.GetKeyDown(KeyCode.Alpha6) && abilitiesGained >= 6 && canUseAbility)
         {
             
             Debug.Log("Used Ability 6");
-            abilityIndexUp = 5;
+            player.currentHealth += 20;
+            player.animator.ResetTrigger("Stab");
+            player.animator.SetTrigger("Heal");
+            canUseAbility = false;
+            if (player.attackPower <= 50)
+            {
+                player.attackPower += 7;
+            }
+            enemy.attackMax = 75;
         }
-        else if (Input.GetKeyDown(KeyCode.Alpha7)&& abilitiesGained >= 7)
+        else if (Input.GetKeyDown(KeyCode.Alpha7) && abilitiesGained >= 7 && canUseAbility)
         {
             
             Debug.Log("Used Ability 7");
-            abilityIndexUp = 6;
+            player.DealDamage(enemy);
+            player.animator.ResetTrigger("Heal");
+            player.animator.SetTrigger("Bolt");
+            canUseAbility = false;
+            if (player.attackPower <= 64)
+            {
+                player.attackPower += 7;
+            }
         }
-        else if (Input.GetKeyDown(KeyCode.Alpha8) && abilitiesGained >= 8)
+        else if (Input.GetKeyDown(KeyCode.Alpha8) && abilitiesGained >= 8 && canUseAbility)
         {
             
             Debug.Log("Used Ability 8");
-            abilityIndexUp = 7;
+            player.DealDamage(enemy);
+            player.animator.ResetTrigger("Bolt");
+            player.animator.SetTrigger("Fire");
+            canUseAbility = false;
+            if (player.attackPower <= 71)
+            {
+                player.attackPower += 7;
+            }
         }
-        else if (Input.GetKeyDown(KeyCode.Alpha9) && abilitiesGained >= 9)
+        else if (Input.GetKeyDown(KeyCode.Alpha9) && abilitiesGained >= 9 && canUseAbility)
         {
             
             Debug.Log("Used Ability 9");
-            abilityIndexUp = 8;
+            player.DealDamage(enemy);
+            player.animator.ResetTrigger("Fire");
+            player.animator.SetTrigger("Fireball");
+            canUseAbility = false;
+            if (player.attackPower <= 78)
+            {
+                player.attackPower += 7;
+            }
         }
-        else if (Input.GetKeyDown(KeyCode.Alpha0) && abilitiesGained >= 10)
+        else if (Input.GetKeyDown(KeyCode.Alpha0) && abilitiesGained >= 10 && canUseAbility)
         {
            
             Debug.Log("Used Ability 10");
-            abilityIndexUp = 9;
+            player.DealDamage(enemy);
+            player.animator.ResetTrigger("Fireball");
+            player.animator.SetTrigger("Cleave");
+            canUseAbility = false;
+            if (player.attackPower <= 85)
+            {
+                player.attackPower += 7;
+            }
         }
         
 

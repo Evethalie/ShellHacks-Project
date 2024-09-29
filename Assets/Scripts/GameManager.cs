@@ -118,6 +118,8 @@ public class GameManager : MonoBehaviour
     public void Restart()
     {
         SceneManager.LoadScene(0);
+        enemy.maxHealth += 200;
+        player.maxHealth = 100;
     }
     public void Quit()
     {
