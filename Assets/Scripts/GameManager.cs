@@ -59,17 +59,7 @@ public class GameManager : MonoBehaviour
 
     public void OnSubmitAnswer()
     {
-      /*  if (questionManager.playerAnswer == questionManager.currentAnswer)
-        {
-            currentAbility = (ScriptableObject)questionManager.abilityList[questionManager.abilityIndexUp];
-            questionManager.UseAbility();
-            if (currentAbility != null) 
-            {
-                Debug.Log("Current Ability is " + currentAbility.ToString());
-            }
-
-        }
-        */
+            questionManager.canUseAbility = true;
             questionManager.SubmitAnswer();
             EndTurn();
         

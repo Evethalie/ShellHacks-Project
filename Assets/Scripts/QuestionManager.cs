@@ -42,10 +42,14 @@ public class QuestionManager : MonoBehaviour
     public int newAbilities = 0;
     public int abilityIndexUp;
 
-   public List <Object> abilityList;
+   
     public int playerAnswer;
 
     public Canvas attackQuestionCanvas;
+    [SerializeField] public bool canUseAbility = false;
+
+    
+     [SerializeField]Image[] allAbilities = new Image[10];
 
     private void Awake()
     {
@@ -75,6 +79,7 @@ public class QuestionManager : MonoBehaviour
             AdjustDifficulty();
             GainAbility();
             player.DealDamage(enemy);
+            canUseAbility = true;
             
            
         }
@@ -91,6 +96,7 @@ public class QuestionManager : MonoBehaviour
         }
         answerInput.text = "";
         GenerateNewQuestion(choices.value);
+        
     }
 
     void GenerateNewQuestion(int choice)
@@ -190,16 +196,15 @@ public class QuestionManager : MonoBehaviour
 
     public void UseAbility()
     {
-        if (Input.GetKeyDown(KeyCode.Alpha1) && abilitiesGained >= 1)
+        if (Input.GetKeyDown(KeyCode.Alpha1) && abilitiesGained >= 1 && canUseAbility)
         {
-            GenerateNewQuestion(choices.value);
-            if (playerAnswer == currentAnswer)
-            {
+            
                 Debug.Log("Used Ability 1");
                 player.attackPower += 5;
                 player.DealDamage(enemy);
                 player.animator.SetTrigger("Attack");
-            }
+                canUseAbility = false;
+            
         }
         else if (Input.GetKeyDown(KeyCode.Alpha2) && abilitiesGained >= 2)
         {
