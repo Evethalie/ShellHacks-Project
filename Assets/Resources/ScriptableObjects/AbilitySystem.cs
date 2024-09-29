@@ -6,8 +6,7 @@ using UnityEngine.EventSystems;
 
 public abstract class AbilitySystem : ScriptableObject
 {
-    
     public AnimationClip AnimationClip;
-    public abstract void Use();
+    public abstract void Use(int index);
     
 }

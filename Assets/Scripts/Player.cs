@@ -8,13 +8,15 @@ public class Player : MonoBehaviour
     public int currentHealth;
     public int attackPower = 10;
     public HealthBar healthBar;
+   public Animator animator;
 
-    public ScriptableObject[] abilities = new ScriptableObject[5];
+    public List<MainAbility> abilities;
 
     private void Start()
     {
         currentHealth = maxHealth;
         healthBar.SetMaxHealth(maxHealth);
+        animator = GetComponent<Animator>();
         
     }
 
@@ -24,6 +26,8 @@ public class Player : MonoBehaviour
         {
             TakeDamage(50);
         }
+        
+        
     }
 
     public void TakeDamage(int damage)

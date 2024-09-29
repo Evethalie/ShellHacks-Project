@@ -18,11 +18,13 @@ public class GameManager : MonoBehaviour
     public QuestionManager questionManager;
     public Text turnText;
     public Text resultText;
+    public Text useAbilityQuestion;
     public Canvas gameOver;
     public Canvas startingScreen;
 
-    private bool isPlayerTurn = true;
-    
+    public bool isPlayerTurn = true;
+
+    public ScriptableObject currentAbility;
 
    
     // Start is called before the first frame update
@@ -52,13 +54,25 @@ public class GameManager : MonoBehaviour
             resultText.text = "You Won! Thank you Hero!";
         }
     }
+
+    
+
     public void OnSubmitAnswer()
     {
-        if (isPlayerTurn)
+      /*  if (questionManager.playerAnswer == questionManager.currentAnswer)
         {
+            currentAbility = (ScriptableObject)questionManager.abilityList[questionManager.abilityIndexUp];
+            questionManager.UseAbility();
+            if (currentAbility != null) 
+            {
+                Debug.Log("Current Ability is " + currentAbility.ToString());
+            }
+
+        }
+        */
             questionManager.SubmitAnswer();
             EndTurn();
-        }
+        
     }
 
     public void EndTurn()
@@ -101,7 +115,16 @@ public class GameManager : MonoBehaviour
         }
     }
 
-   
+    public int GetPressedNumber()
+    {
+        for (int number = 0; number <= 9; number++)
+        {
+            if (Input.GetKeyDown(number.ToString()))
+                return number;
+        }
+
+        return -1;
+    }
     public void Restart()
     {
         SceneManager.LoadScene(0);
