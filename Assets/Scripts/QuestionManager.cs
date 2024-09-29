@@ -65,7 +65,7 @@ public class QuestionManager : MonoBehaviour
     {
          player = FindObjectOfType<Player>();
        enemy = FindObjectOfType<Enemy>();
-        GenerateNewQuestion(choices.value);
+        GenerateNewQuestion(choices.value + 1);
         
     }
 

@@ -39,6 +39,10 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         CheckGameOver();
+        if(Input.GetKeyUp(KeyCode.Escape))
+        {
+            Application.Quit();
+        }
     }
 
     void CheckGameOver()
