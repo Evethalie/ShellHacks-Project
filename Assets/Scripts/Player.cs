@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    public int maxHealth = 300;
+    public int maxHealth = 450;
     public int currentHealth;
     public int attackPower = 10;
     public HealthBar healthBar;
    public Animator animator;
 
-    public List<MainAbility> abilities;
+    
 
     private void Start()
     {
@@ -22,7 +22,10 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
-        
+        if (Input.GetKeyUp(KeyCode.K))
+        {
+            TakeDamage(100);
+        }
     }
 
     public void TakeDamage(int damage)

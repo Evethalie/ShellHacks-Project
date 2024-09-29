@@ -25,6 +25,7 @@ public class GameManager : MonoBehaviour
     public bool isPlayerTurn = true;
 
     public ScriptableObject currentAbility;
+    public Text gameOverText;
 
    
     // Start is called before the first frame update
@@ -45,13 +46,13 @@ public class GameManager : MonoBehaviour
         if (player.currentHealth <= 0)
         {
             gameOver.gameObject.SetActive(true);
-            resultText.text = "You Lost! Game Over!";
+            gameOverText.text = "You Lost! Game Over!";
             
         }
         else if (enemy.currentHealth <= 0) 
         {
              gameOver.gameObject.SetActive(true);
-            resultText.text = "You Won! Thank you Hero!";
+            gameOverText.text = "You Won! Thank you Hero!";
         }
     }
 
